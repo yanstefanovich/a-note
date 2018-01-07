@@ -3,6 +3,8 @@ const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
+const port = 5000;
+
 const app = express();
 
 //Connect to Mongoose
@@ -42,7 +44,6 @@ app.get('/',(req,res) => {
 app.get('/about',(req,res) => {
   res.render('about');
 });
-const port = 5000;
 
 // Note Index Page
 app.get('/notes', (req, res)=>{
@@ -60,8 +61,20 @@ app.get('/notes/add',(req,res)=>{
   res.render('notes/add');
 });
 
+//Edit Note Form
+app.get('/notes/edit/:id',(req,res) => {
+  Note.findOne({
+    _id: req.params.id,
+  })
+  .then(note=>{
+    res.render('notes/edit',{
+      note
+    });
+  })
+});
+
 // Process form
-app.post('/ideas', (req,res) =>{
+app.post('/notes', (req,res) =>{
   let errors = [];
 
   if (!req.body.title) {
