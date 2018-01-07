@@ -44,6 +44,17 @@ app.get('/about',(req,res) => {
 });
 const port = 5000;
 
+// Note Index Page
+app.get('/notes', (req, res)=>{
+  Note.find({})
+      .sort({date:'desc'})
+      .then(notes =>{
+        res.render('notes/index',{
+          notes
+        });
+      });
+});
+
 // Add Note Form
 app.get('/notes/add',(req,res)=>{
   res.render('notes/add');
@@ -80,6 +91,7 @@ app.post('/ideas', (req,res) =>{
   }
 });
 
+// Notify Server Running
 app.listen(port, () =>{
   console.log(`Server started on port ${port}`);
 });
