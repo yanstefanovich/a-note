@@ -109,7 +109,7 @@ app.post('/notes', (req,res) =>{
   }
 });
 
-//Edit Form
+//Edit Note Form
 app.put('/notes/:id', (req,res)=>{
   Note.findOne({
     _id:req.params.id
@@ -122,6 +122,14 @@ app.put('/notes/:id', (req,res)=>{
     .then(note => {
       res.redirect('/notes');
     });
+  });
+});
+
+// Delete Note Form
+app.delete('/notes/:id', (req,res) => {
+  Note.remove({_id:req.params.id})
+  .then(() => {
+    res.redirect('/notes');
   });
 });
 

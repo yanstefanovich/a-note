@@ -2,8 +2,15 @@
 <div class="card card-body mb-2">
   <h4>{{title}}</h4>
   <p>{{contents}}</p>
-  <a class="btn btn-dark btn-block" href="/notes/edit/{{id}}">Edit</a>
+  <a class="btn btn-dark btn-block mb-2" href="/notes/edit/{{id}}">Edit Note</a>
+  <form class="" action="/notes/{{id}}?_method=DELETE" method="post">
+    <input type="hidden" name="_method" value="DELETE">
+    <input class="btn btn-danger btn-block" type="submit" value="Delete Note">
+  </form>
 </div>
 {{else}}
-<p>No Notes Listed</p>
+<div class="text-center jumbotron">
+  <h5 class="mb-3">You Don't Have Any Notes.</h5>
+  <a class="btn btn-primary" href="/notes/add">Add a Note</a>
+</div>
 {{/each}}
