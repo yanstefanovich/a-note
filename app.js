@@ -3,7 +3,8 @@ const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const mongoose = require('mongoose');
-
+const flash = require('connect-flash');
+const session = require('express-session');
 
 const port = 5000;
 
@@ -30,6 +31,24 @@ app.use(bodyParser.json());
 
 // Method Override Middleware
 app.use(methodOverride('_method'));
+
+// Express Session Middeware
+app.use(session({
+  secret: 'secret',
+  resave: true,
+  saveUninitialized: true
+}));
+
+// Connect Flash
+app.use(flash());
+
+// GLobal Variables
+app.use(function(req, res, next) {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
+  next();
+});
 
 //How Middle Works
 app.use(function(req,res,next) {
@@ -104,6 +123,7 @@ app.post('/notes', (req,res) =>{
     new Note(newUser)
         .save()
         .then(note => {
+          req.flash('success_msg', 'Note Added.');
           res.redirect('/notes');
         })
   }
@@ -120,6 +140,7 @@ app.put('/notes/:id', (req,res)=>{
 
     note.save()
     .then(note => {
+      req.flash('success_msg', 'Note Updated.');
       res.redirect('/notes');
     });
   });
@@ -129,6 +150,7 @@ app.put('/notes/:id', (req,res)=>{
 app.delete('/notes/:id', (req,res) => {
   Note.remove({_id:req.params.id})
   .then(() => {
+    req.flash('success_msg', 'Note Removed.');
     res.redirect('/notes');
   });
 });
