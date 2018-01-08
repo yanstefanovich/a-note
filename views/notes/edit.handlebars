@@ -1,7 +1,8 @@
 <div class="card card-body">
   <h3 class="text-center">Edit The Note</h3>
-  <form class="" action="/notes" method="post">
+  <form class="" method="POST" action="/notes/{{note.id}}?_method=PUT">
     <div class="form-group">
+      <input type="hidden" name="_method" value="PUT">
       <label for="title">Title</label>
       <input type="text" value="{{note.title}}" name="title" class="form-control" required>
     </div>
