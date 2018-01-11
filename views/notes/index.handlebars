@@ -1,7 +1,7 @@
 {{#each notes}}
-<div class="card card-body mb-2">
-  <h4 class="text-center">{{title}}</h4>
-  <p>{{contents}}</p>
+<div class="card card-body mb-3">
+  <h3 class="text-center">{{title}}</h4>
+  <p class="lead text-center mb-5">{{contents}}</p>
   <a class="btn btn-dark btn-block mb-2" href="/notes/edit/{{id}}">Edit Note</a>
   <form class="" action="/notes/{{id}}?_method=DELETE" method="post">
     <input type="hidden" name="_method" value="DELETE">
