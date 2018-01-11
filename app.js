@@ -26,7 +26,7 @@ app.engine('handlebars', exphbs({
 }));
 app.set('view engine', 'handlebars');
 
-// Body Parse Middleware
+// Body Parser Middleware
 app.use(bodyParser.urlencoded({ extend: false }));
 app.use(bodyParser.json());
 
