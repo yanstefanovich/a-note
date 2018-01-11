@@ -5,12 +5,12 @@ const router = express.Router();
 
 // User Login Route
 router.get('/login', (req,res) => {
-  res.send('LOGIN');
+  res.render('users/login');
 });
 
 // User Registration
 router.get('/register', (req,res) => {
-  res.send('Register');
+  res.render('users/register');
 });
 
 module.exports = router;
