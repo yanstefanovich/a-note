@@ -12,7 +12,7 @@ const Note = mongoose.model('notes');
 
 // Note Index Page
 router.get('/', ensureAuthenticated, (req, res)=>{
-  Note.find({})
+  Note.find({user: req.user.id})
       .sort({date:'desc'})
       .then(notes =>{
         res.render('notes/index',{
@@ -32,9 +32,14 @@ router.get('/edit/:id', ensureAuthenticated, (req, res) => {
     _id: req.params.id,
   })
   .then(note=>{
-    res.render('notes/edit',{
-      note
-    });
+    if (note.user != req.user.id) {
+      req.flash('error_msg','Access Denied');
+      res.redirect('/notes');
+    } else {
+      res.render('notes/edit',{
+        note
+      });
+    }
   })
 });
 
@@ -59,7 +64,8 @@ router.post('/', ensureAuthenticated, (req, res) =>{
   } else {
     const newUser = {
       title: req.body.title,
-      contents: req.body.contents
+      contents: req.body.contents,
+      user: req.user.id
     }
     new Note(newUser)
         .save()
@@ -70,7 +76,7 @@ router.post('/', ensureAuthenticated, (req, res) =>{
   }
 });
 
-//Edit Note Form
+//Edit Note Process
 router.put('/:id', ensureAuthenticated, (req, res)=>{
   Note.findOne({
     _id:req.params.id
