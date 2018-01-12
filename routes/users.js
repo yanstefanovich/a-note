@@ -5,6 +5,10 @@ const bcrypt = require('bcryptjs');
 
 const router = express.Router();
 
+// Load User Model
+require('../models/Users');
+const User = mongoose.model('users');
+
 // User Login Route
 router.get('/login', (req,res) => {
   res.render('users/login');
@@ -23,7 +27,7 @@ router.post('/register', (req, res) => {
     errors.push({text: 'Passwords do not match.'});
   }
   if (req.body.password.length < 4) {
-    errors.push({text: 'Pasword must be atleast 4 characters'})
+    errors.push({text: 'Password must be atleast 4 characters'})
   }
 
   if (errors.length > 0) {
@@ -33,19 +37,36 @@ router.post('/register', (req, res) => {
       email: req.body.email
     });
   } else {
-    const newUser = {
-     title: req.body.name,
-     contents: req.body.email,
-     password: req.body.password
-    }
-    bcrypt.genSalt();
-    console.log(newUser);
-    // new Note(newUser)
-    //     .save()
-    //     .then(note => {
-    //       req.flash('success_msg', 'Note Added.');
-    //       res.redirect('/notes');
-    //     })
+    User.findOne({email: req.body.email})
+    .then(user => {
+      if (user) {
+        req.flash('error_msg', 'Email already registered.');
+        res.redirect('/users/register');
+      } else {
+        const newUser = {
+          name: req.body.name,
+          email: req.body.email,
+          password: req.body.password
+        };
+        req.body.password = req.body.password2 = 'password';
+        console.log(req.body.password + req.body.password2);
+        bcrypt.genSalt(10 ,(err, salt) => {
+          bcrypt.hash(newUser.password, salt, (err, hash) => {
+            if (err) throw err;
+            newUser.password = hash;
+            new User(newUser).save()
+            .then(user => {
+              req.flash('success_msg', 'You are now registered. You can log in.');
+              res.redirect('/users/login');
+            })
+            .catch(err => {
+              console.log(err.toString());
+              return;
+            });
+          });
+        });
+      }
+    });
   }
 });
 
