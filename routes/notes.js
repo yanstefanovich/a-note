@@ -3,12 +3,15 @@ const mongoose = require('mongoose');
 
 const router = express.Router();
 
+// Load Helper
+const {ensureAuthenticated} = require('../helpers/auth');
+
 // Load Note Model
 require('../models/Notes');
 const Note = mongoose.model('notes');
 
 // Note Index Page
-router.get('/', (req, res)=>{
+router.get('/', ensureAuthenticated, (req, res)=>{
   Note.find({})
       .sort({date:'desc'})
       .then(notes =>{
@@ -19,12 +22,12 @@ router.get('/', (req, res)=>{
 });
 
 // Add Note Form
-router.get('/add',(req,res)=>{
+router.get('/add', ensureAuthenticated, (req, res)=>{
   res.render('notes/add');
 });
 
 //Edit Note Form
-router.get('/edit/:id',(req,res) => {
+router.get('/edit/:id', ensureAuthenticated, (req, res) => {
   Note.findOne({
     _id: req.params.id,
   })
@@ -36,7 +39,7 @@ router.get('/edit/:id',(req,res) => {
 });
 
 // Add Note Process Form
-router.post('/', (req,res) =>{
+router.post('/', ensureAuthenticated, (req, res) =>{
   let errors = [];
 
   if (!req.body.title) {
@@ -68,7 +71,7 @@ router.post('/', (req,res) =>{
 });
 
 //Edit Note Form
-router.put('/:id', (req,res)=>{
+router.put('/:id', ensureAuthenticated, (req, res)=>{
   Note.findOne({
     _id:req.params.id
   })
@@ -85,7 +88,7 @@ router.put('/:id', (req,res)=>{
 });
 
 // Delete Note Form
-router.delete('/:id', (req,res) => {
+router.delete('/:id', ensureAuthenticated, (req, res) => {
   Note.remove({_id:req.params.id})
   .then(() => {
     req.flash('success_msg', 'Note Removed.');

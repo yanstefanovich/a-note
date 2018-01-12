@@ -3,7 +3,7 @@ module.exports = {
     if (req.isAuthenticated()) {
       return next();
     } else {
-      req.flash('error_msg','Access Denied');
+      req.flash('error_msg','You Must Be Logged In To Access That');
       res.redirect('/users/login');
     }
   }
