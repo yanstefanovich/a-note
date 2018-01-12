@@ -7,11 +7,14 @@ const methodOverride = require('method-override');
 const mongoose = require('mongoose');
 const flash = require('connect-flash');
 const session = require('express-session');
+const passport = require('passport');
 
 //Load Routes
 const notes = require('./routes/notes');
 const users = require('./routes/users');
 
+// Passport Config
+require('./config/passport')(passport);
 const port = 5000;
 
 const app = express();
@@ -44,6 +47,10 @@ app.use(session({
   saveUninitialized: true
 }));
 
+// Passport Middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Connect Flash
 app.use(flash());
 
@@ -52,6 +59,7 @@ app.use(function(req, res, next) {
   res.locals.success_msg = req.flash('success_msg');
   res.locals.error_msg = req.flash('error_msg');
   res.locals.error = req.flash('error');
+  res.locals.user = req.user || null;
   next();
 });
 
