@@ -11,10 +11,18 @@
               <input type="text" name="name" value="{{name}}" class="form-control" required>
             </div>
             <div class="form-group">
+              <div class="alert alert-warning">
+                When creating a username, opt for a non-existing email. The application is not
+                yet optimized for full safety.
+              </div>
               <label for="email">Email</label>
               <input type="email" name="email" value="{{email}}" class="form-control" required>
             </div>
             <div class="form-group">
+              <div class="alert alert-warning">
+                When creating a password, opt for a dummy password. The application is not
+                yet optimized for full safety.
+              </div>
               <label for="password">Password</label>
               <input type="password" name="password" class="form-control" required>
             </div>
@@ -24,6 +32,12 @@
             </div>
             <div class="text-center">
               <button type="submit" class="btn btn-primary">Register</button>
+            </div>
+            <div class="text-center mt-3 mb-1">
+              Already registered?
+            </div>
+            <div class="text-center">
+              <a class="btn btn-secondary" href="/users/login">Login</a>
             </div>
           </div>
         </form>
