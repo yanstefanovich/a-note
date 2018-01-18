@@ -15,7 +15,7 @@ const users = require('./routes/users');
 
 // Passport Config
 require('./config/passport')(passport);
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 const app = express();
 
