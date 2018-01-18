@@ -17,10 +17,14 @@ const users = require('./routes/users');
 require('./config/passport')(passport);
 const port = process.env.PORT || 5000;
 
+// DB Config
+const db = require('./config/database');
+
+// Server Setup
 const app = express();
 
 //Connect to Mongoose
-mongoose.connect('mongodb://localhost/a-note-dev')
+mongoose.connect(db.mongoURI)
 .then(() => console.log(`MongoDB Connected`))
 .catch( err => console.log(err.toString()));
 
